@@ -9,43 +9,40 @@ import { Input, FormBtn } from "../components/Form";
 
 function Books() {
   // Setting our component's initial state
-  const [books, setBooks] = useState([])
+  const [books, setBooks] = useState([]);
   // const [formObject, setFormObject] = useState({})
   const [bookSearch, setBookSearch] = useState("");
 
   // Load all books and store them with setBooks
-  useEffect(() => {
-  }, [])
+  useEffect(() => {}, []);
 
   // Loads all books and sets them to books
   function loadBooks() {
     API.getApiBook()
-      .then(res =>
-        setBooks(res.data.items)
-      )
+      .then(res => setBooks(res.data.items))
       .catch(err => console.log(err));
-  };
+  }
 
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
     const { value } = event.target;
-    setBookSearch(value)
-  };
+    setBookSearch(value);
+  }
 
   const handleFormSubmit = event => {
     // When the form is submitted, prevent its default behavior, get recipes update the recipes state
     event.preventDefault();
     API.getApiBook(bookSearch)
       .then(res => {
-        console.log(res)
-        setBooks(res.data.items)
+        console.log(res);
+        setBooks(res.data.items);
       })
       .catch(err => console.log(err));
   };
   //  Use the API.saveBook method to save the book data
   //   Then reload books from the database
-  function handleBookSave({id, title, author, synopsis, link, image}) {
-    console.log(id, title, author, synopsis, link, image)
+  function handleBookSave({ id, title, author, synopsis, link, image }) {
+    console.log(id, title, author, synopsis, link, image);
 
     API.saveBook({
       title: title,
@@ -53,18 +50,17 @@ function Books() {
       synopsis: synopsis,
       link: link,
       image: image
-    })
-      .catch(err => console.log(err));
-      alert("Book has been saved!")
-  };
+    }).catch(err => console.log(err));
+    alert("Book has been saved!");
+  }
 
   return (
     <Container fluid>
       <Row>
         <Col size="md-12">
           <Jumbotron>
-            <h1>(React) Google Books Search</h1>
-            <h3>Search for and Save Books of Interest</h3>
+            <h1>Google Books Search - React</h1>
+            <h3>Search and Save Books through the search bar below</h3>
           </Jumbotron>
           <form>
             <Input
@@ -78,7 +74,7 @@ function Books() {
               onClick={handleFormSubmit}
             >
               Submit Book
-              </FormBtn>
+            </FormBtn>
           </form>
           <br></br>
           <br></br>
@@ -89,7 +85,16 @@ function Books() {
               {books.map(book => (
                 <ListItem key={book.id}>
                   <SaveBtn
-                    onClick={() => handleBookSave({id: book.id, title: book.volumeInfo.title, author: book.volumeInfo.authors[0], synopsis: book.volumeInfo.description, link: book.volumeInfo.previewLink, image: book.volumeInfo.imageLinks.thumbnail})}
+                    onClick={() =>
+                      handleBookSave({
+                        id: book.id,
+                        title: book.volumeInfo.title,
+                        author: book.volumeInfo.authors[0],
+                        synopsis: book.volumeInfo.description,
+                        link: book.volumeInfo.previewLink,
+                        image: book.volumeInfo.imageLinks.thumbnail
+                      })
+                    }
                   />
                   <br></br>
                   <Card
@@ -104,14 +109,12 @@ function Books() {
               ))}
             </List>
           ) : (
-              <h3>No Results to Display</h3>
-            )}
-
+            <h3>No Results to Display</h3>
+          )}
         </Col>
       </Row>
     </Container>
   );
 }
-
 
 export default Books;
